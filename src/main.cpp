@@ -7,9 +7,13 @@
 
 #define NUM_LEDS 100
 #define PIN 1
+#define BRIGHTNESS 64
 #define LED_OFF LOW
 #define LED_ON HIGH
 #define BUTTON_ACTIVE LOW
+#define LED_TYPE WS2812B
+#define COLOR_ORDER RGB
+#define UPDATES_PER_SECOND 100
 
 const int LED_PIN = 7;
 const int BUTTON_PIN = 13;
@@ -19,26 +23,22 @@ BLEUart bleuart; // uart over ble
 
 CRGBArray<NUM_LEDS> leds;
 
-void rgbSequence()
-{
-  static uint8_t hue;
-  for (int i = 0; i < NUM_LEDS / 2; i++)
-  {
-    // fade everything out
-    leds.fadeToBlackBy(40);
+CRGBPalette16 currentPalette;
+TBlendType currentBlending;
 
-    // let's set an led value
-    leds[i] = CHSV(hue++, 255, 255);
-
-    // now, let's first 20 leds to the top 20 leds,
-    leds(NUM_LEDS / 2, NUM_LEDS - 1) = leds(NUM_LEDS / 2 - 1, 0);
-    FastLED.delay(33);
-  }
-}
+extern CRGBPalette16 myRedWhiteBluePalette;
+extern const TProgmemPalette16 myRedWhiteBluePalette_p PROGMEM;
+extern CRGBPalette16 myTripleStrange;
+extern const TProgmemPalette16 myTripleStrange_p PROGMEM;
 
 void setup()
 {
-  FastLED.addLeds<WS2812B, PIN>(leds, NUM_LEDS);
+  delay(3000); // power-up safety delay
+  FastLED.addLeds<LED_TYPE, LED_PIN, COLOR_ORDER>(leds, NUM_LEDS).setCorrection(TypicalLEDStrip);
+  FastLED.setBrightness(BRIGHTNESS);
+
+  currentPalette = RainbowColors_p;
+  currentBlending = LINEARBLEND;
   // Initialize hardware:
   Serial.begin(9600);       // Serial is the USB serial port
   pinMode(LED_PIN, OUTPUT); // Turn on-board blue LED off
@@ -75,29 +75,21 @@ void loop()
   // If data has come in via BLE:
   if (bleuart.available())
   {
-    uint8_t c;
+    uint8_t lightChooser;
     // use bleuart.read() to read a character sent over BLE
-    c = (uint8_t)bleuart.read();
+    lightChooser = (uint8_t)bleuart.read();
     // Print out the character for debug purposes:
-    Serial.write(c);
+    Serial.write(lightChooser);
 
     // If the character is one of our expected values,
     // do something:
-    switch (c)
-    {
-    // 0 number or character, turn the LED off:
-    case 0:
-    case '0':
-      digitalWrite(LED_PIN, LED_OFF);
-      break;
-    // 1 number or character, turn the LED on:
-    case 1:
-    case '1':
-      digitalWrite(LED_PIN, LED_ON);
-      break;
-    default:
-      break;
-    }
+    // ChangePalettePeriodically();
+    static uint8_t startIndex = 0;
+    startIndex = startIndex + 1; /* motion speed */
+
+    // FillLEDsFromPaletteColors(startIndex);
+    FastLED.show();
+    FastLED.delay(1000 / UPDATES_PER_SECOND);
   }
 
   // If our button state has changed:
@@ -109,3 +101,58 @@ void loop()
     bleuart.write(!buttonState);
   }
 }
+
+void FillLEDsFromPaletteColors(uint8_t colorIndex)
+{
+  uint8_t brightness = 255;
+
+  for (int i = 0; i < NUM_LEDS; i++)
+  {
+    leds[i] = ColorFromPalette(currentPalette, colorIndex, brightness, currentBlending);
+    colorIndex += 3;
+  }
+}
+
+// There are several different palettes of colors demonstrated here.
+//
+// FastLED provides several 'preset' palettes: RainbowColors_p, RainbowStripeColors_p,
+// OceanColors_p, CloudColors_p, LavaColors_p, ForestColors_p, and PartyColors_p.
+//
+// Additionally, you can manually define your own color palettes, or you can write
+// code that creates color palettes on the fly.  All are shown here.
+
+void ChangePalettePeriodically()
+{
+  uint8_t secondHand = (millis() / 1000) % 60;
+  static uint8_t lastSecond = 99;
+
+  if (lastSecond != secondHand)
+  {
+    lastSecond = secondHand;
+
+    if (secondHand == 49)
+    {
+      currentPalette = myTripleStrange_p;
+      currentBlending = LINEARBLEND;
+    }
+  }
+}
+
+const TProgmemPalette16 myTripleStrange_p PROGMEM =
+    {
+        CRGB::Blue,
+        CRGB::Gray,
+        CRGB::Orange,
+        CRGB::Gray,
+        CRGB::Blue,
+        CRGB::Gray,
+        CRGB::Orange,
+        CRGB::Gray,
+        CRGB::Blue,
+        CRGB::Gray,
+        CRGB::Orange,
+        CRGB::Gray,
+        CRGB::Blue,
+        CRGB::Gray,
+        CRGB::Orange,
+        CRGB::Gray};
