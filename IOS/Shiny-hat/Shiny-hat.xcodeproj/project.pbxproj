@@ -14,6 +14,7 @@
 		B868E7E629E3B845005D2D06 /* Shiny_hatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868E7E529E3B845005D2D06 /* Shiny_hatTests.swift */; };
 		B868E7F029E3B845005D2D06 /* Shiny_hatUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868E7EF29E3B845005D2D06 /* Shiny_hatUITests.swift */; };
 		B868E7F229E3B845005D2D06 /* Shiny_hatUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868E7F129E3B845005D2D06 /* Shiny_hatUITestsLaunchTests.swift */; };
+		B868E83C29E48A32005D2D06 /* TransferService.swift in Sources */ = {isa = PBXBuildFile; fileRef = B868E83B29E48A32005D2D06 /* TransferService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +45,7 @@
 		B868E7EB29E3B845005D2D06 /* Shiny-hatUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Shiny-hatUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		B868E7EF29E3B845005D2D06 /* Shiny_hatUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shiny_hatUITests.swift; sourceTree = "<group>"; };
 		B868E7F129E3B845005D2D06 /* Shiny_hatUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shiny_hatUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		B868E83B29E48A32005D2D06 /* TransferService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,7 @@
 				B868E7D629E3B844005D2D06 /* ContentView.swift */,
 				B868E7D829E3B845005D2D06 /* Assets.xcassets */,
 				B868E7DA29E3B845005D2D06 /* Preview Content */,
+				B868E83B29E48A32005D2D06 /* TransferService.swift */,
 			);
 			path = "Shiny-hat";
 			sourceTree = "<group>";
@@ -257,6 +260,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B868E83C29E48A32005D2D06 /* TransferService.swift in Sources */,
 				B868E7D729E3B844005D2D06 /* ContentView.swift in Sources */,
 				B868E7D529E3B844005D2D06 /* Shiny_hatApp.swift in Sources */,
 			);

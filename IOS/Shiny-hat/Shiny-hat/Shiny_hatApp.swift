@@ -1,17 +1,22 @@
-//
-//  Shiny_hatApp.swift
-//  Shiny-hat
-//
-//  Created by Vidhatu Patel on 4/9/23.
-//
+/*
+See LICENSE folder for this sample’s licensing information.
 
-import SwiftUI
+Abstract:
+A default implementation of the UIApplicationDelegate protocol.
+*/
 
-@main
-struct Shiny_hatApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+import UIKit
+import CoreBluetooth
+
+@UIApplicationMain
+class AppDelegate: UIResponder, UIApplicationDelegate {
+
+    var window: UIWindow?
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        // Override point for customization after application launch.
+        
+        return true
     }
 }
+
